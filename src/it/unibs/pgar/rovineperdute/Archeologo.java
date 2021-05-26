@@ -8,16 +8,29 @@ public class Archeologo {
         this.team = team;
     }
 
-    public double scegliVeicolo(Archeologo ar, Citta citta_uno, Citta citta_due){
+    /**
+     * Metodo che in base al team e al suo veicolo restituisce il carburate utilizzato per un determinato percorso
+     * @param ar
+     * @param citta_uno
+     * @param citta_due
+     * @return
+     */
+    public double carburanteUtilizzato(Archeologo ar, Citta citta_uno, Citta citta_due){
         if(team.equals(Team.Tonatiuh)){
-            return calcolo_lunghezza_sentiero_tonatiu(citta_uno, citta_due);
+            return calcolo_lunghezza_sentiero_tonatiuh(citta_uno, citta_due);
         }else{
             return calcolo_lunghezza_sentiero_metztli(citta_uno, citta_due);
         }
 
     }
 
-    public double calcolo_lunghezza_sentiero_tonatiu(Citta citta_uno, Citta citta_due){
+    /**
+     * calcolo del carbirante utilizzato tra due città dal team tonatiuh
+     * @param citta_uno
+     * @param citta_due
+     * @return
+     */
+    public double calcolo_lunghezza_sentiero_tonatiuh(Citta citta_uno, Citta citta_due){
 
         double lunghezza = 0;
 
@@ -27,6 +40,12 @@ public class Archeologo {
         return lunghezza;
     }
 
+    /**
+     * calcolo del carbirante utilizzato tra due città dal team metztli
+     * @param citta_uno
+     * @param citta_due
+     * @return
+     */
     public double calcolo_lunghezza_sentiero_metztli(Citta citta_uno, Citta citta_due) {
         double lunghezza = 0;
 

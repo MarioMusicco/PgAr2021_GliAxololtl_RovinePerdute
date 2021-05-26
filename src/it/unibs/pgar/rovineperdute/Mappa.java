@@ -12,8 +12,8 @@ public class Mappa {
     private int numero_citta;
     private ArrayList<Citta> citta= new ArrayList<>();
 
-    public Mappa() throws XMLStreamException {
-        creaMappa();
+    public Mappa(String file_input) throws XMLStreamException {
+        creaMappa(file_input);
         this.numero_citta = citta.size();
     }
 
@@ -33,17 +33,28 @@ public class Mappa {
         this.citta = citta;
     }
 
-    public void creaMappa() throws XMLStreamException {
+    /**
+     * Metodo che procede con la lettura del file xml delle città scelto dall'utente.
+     * procede con la lettura città per città e una volta che trova un tag di chiusura di una città, e quindi
+     * alla lettua completa di una città, mi crea l'oggetto Citta che verrà poi inserito/aggiunto nella mappa
+     * @param file_input
+     * @throws XMLStreamException
+     */
+    public void creaMappa(String file_input) throws XMLStreamException {
 
         XMLInputFactory xmlif = null;
         XMLStreamReader xmlr = null;
         try {
             xmlif = XMLInputFactory.newInstance();
-            xmlr = xmlif.createXMLStreamReader("PgAr_Map_5.xml", new FileInputStream("PgAr_Map_5.xml"));
+            xmlr = xmlif.createXMLStreamReader(file_input, new FileInputStream(file_input));
         } catch (Exception e) {
-            System.out.println("Errore nell'inizializzazione del reader:");
+            System.out.println(Costanti.ERRORE_NELL_INIZIALIZZAZIONE_DEL_READER);
             System.out.println(e.getMessage());
         }
+
+        //creo delle variabili che ciclo per ciclo verranno poi ritrascritte
+        //queste variabili tengono in memoria i dati di una città letto dall'xml ed una volta letta tutta la città
+        //mi servono per essere inserite nel costruttore di citta
 
         String name = null;
         int id = 0;
@@ -56,22 +67,22 @@ public class Mappa {
                     break;
 
                 case XMLStreamConstants.START_ELEMENT: // inizio di un elemento: stampa il nome del tag e i suoi attributi
-                    if(xmlr.getLocalName().equals("city")){
+                    if(xmlr.getLocalName().equals(Costanti.CITY)){
                         for (int i = 0; i < xmlr.getAttributeCount(); i++) {
                             //System.out.printf(" => attributo %s->%s%n", xmlr.getAttributeLocalName(i), xmlr.getAttributeValue(i));
-                            if(xmlr.getAttributeLocalName(i).equals("name")){
+                            if(xmlr.getAttributeLocalName(i).equals(Costanti.NOME)){
                                 name = xmlr.getAttributeValue(i);
-                            }else if(xmlr.getAttributeLocalName(i).equals("id")){
+                            }else if(xmlr.getAttributeLocalName(i).equals(Costanti.ID)){
                                 id = Integer.valueOf(xmlr.getAttributeValue(i));
-                            }else if(xmlr.getAttributeLocalName(i).equals("x")){
+                            }else if(xmlr.getAttributeLocalName(i).equals(Costanti.LONGITUDINE)){
                                 x = Double.valueOf(xmlr.getAttributeValue(i));
-                            }else if(xmlr.getAttributeLocalName(i).equals("y")){
+                            }else if(xmlr.getAttributeLocalName(i).equals(Costanti.LATITUDINE)){
                                 y = Double.valueOf(xmlr.getAttributeValue(i));
-                            }else if(xmlr.getAttributeLocalName(i).equals("h")){
+                            }else if(xmlr.getAttributeLocalName(i).equals(Costanti.ALTITUDINE)){
                                 z = Double.valueOf(xmlr.getAttributeValue(i));
                             }
                         }
-                    }else if(xmlr.getLocalName().equals("link")){
+                    }else if(xmlr.getLocalName().equals(Costanti.LINK)){
                         int numero = xmlr.getAttributeCount()-1;
                         collegamenti.add(Integer.valueOf(xmlr.getAttributeValue(numero)));
                     }
@@ -79,7 +90,7 @@ public class Mappa {
                     break;
 
                 case XMLStreamConstants.END_ELEMENT: // fine di un elemento: stampa il nome del tag chiuso
-                    if(xmlr.getLocalName().equals("city")){
+                    if(xmlr.getLocalName().equals(Costanti.CITY)){
                         Coordinate cord = new Coordinate(z, y, x);
                         Citta city = new Citta(cord, name, id, collegamenti);
                         citta.add(city);
@@ -92,17 +103,25 @@ public class Mappa {
 
     }
 
+    /**
+     * Metodo per la formazione del grafo del calcolo dei collegamenti tra le varie città
+     * @param archeologo
+     * @return matrice grafo
+     */
     public double[][] creaPercorso (Archeologo archeologo){
 
         double infinito = Double.POSITIVE_INFINITY;
         double[][] sentieri_veicolo = new double[numero_citta][numero_citta];
         for(int i = 0; i < numero_citta; i++){
             for (int j = 0; j < numero_citta; j++){
+                //se la riga e colonna corrisponde alla stessa città vuol dire che la distanza è zero
                 if(i == j){
                     sentieri_veicolo[i][j] = 0;
                 }else{
-                    if(metodo_bellissimo(citta.get(i), citta.get(j))){
-                        sentieri_veicolo[i][j] = archeologo.scegliVeicolo(archeologo, citta.get(i), citta.get(j));
+                    //controlla se la città presa (quella che corrisponde all'indice i) in considerazione possiede nei suoi collegamenti con le altre città
+                    //l'id della seconda città che stiamo controllando (quella che corrisponde all'indice j)
+                    if(citta.get(i).getCollegamenti_citta().contains(citta.get(j).getID())){
+                        sentieri_veicolo[i][j] = archeologo.carburanteUtilizzato(archeologo, citta.get(i), citta.get(j));
                     }else{
                         sentieri_veicolo[i][j] = infinito;
                     }
@@ -117,20 +136,5 @@ public class Mappa {
         }
         return sentieri_veicolo;
     }
-
-
-    public boolean metodo_bellissimo(Citta c1, Citta c2){
-         for (int i = 0; i < c1.getCollegamenti_citta().size(); i++){
-             if(c1.getCollegamenti_citta().get(i).equals(c2.getID())){
-                 return true;
-             }
-         }
-         return false;
-    }
-
-
-
-
-
 
 }
