@@ -7,13 +7,13 @@ public class Citta {
     private Coordinate coordinate;
     private String nome;
     private int ID;
-    private ArrayList<Integer> collegamenti_citta;
+    private ArrayList<Integer> collegamenti_citta= new ArrayList<>();
 
     public Citta(Coordinate coordinate, String nome, int ID, ArrayList<Integer> collegamenti_citta) {
         this.coordinate = coordinate;
         this.nome = nome;
         this.ID = ID;
-        this.collegamenti_citta = collegamenti_citta;
+        this.collegamenti_citta.addAll(collegamenti_citta);
     }
 
     public Coordinate getCoordinate() {

@@ -67,7 +67,7 @@ public class Mappa {
                                 x = Double.valueOf(xmlr.getAttributeValue(i));
                             }else if(xmlr.getAttributeLocalName(i).equals("y")){
                                 y = Double.valueOf(xmlr.getAttributeValue(i));
-                            }else if(xmlr.getAttributeLocalName(i).equals("z")){
+                            }else if(xmlr.getAttributeLocalName(i).equals("h")){
                                 z = Double.valueOf(xmlr.getAttributeValue(i));
                             }
                         }
@@ -83,6 +83,7 @@ public class Mappa {
                         Coordinate cord = new Coordinate(z, y, x);
                         Citta city = new Citta(cord, name, id, collegamenti);
                         citta.add(city);
+                        collegamenti.clear();
                     }
                     break;
             }
@@ -94,62 +95,42 @@ public class Mappa {
     public double[][] creaPercorso (Archeologo archeologo){
 
         double infinito = Double.POSITIVE_INFINITY;
-        double[][] sentieri_veicolo_uno = new double[numero_citta][numero_citta];
+        double[][] sentieri_veicolo = new double[numero_citta][numero_citta];
         for(int i = 0; i < numero_citta; i++){
             for (int j = 0; j < numero_citta; j++){
                 if(i == j){
-                    sentieri_veicolo_uno[i][j] = 0;
+                    sentieri_veicolo[i][j] = 0;
                 }else{
-                    if(citta.get(i).getCollegamenti_citta().contains(citta.get(j).getID())){
-                        sentieri_veicolo_uno[i][j] = calcolo_lunghezza_sentiero_uno(citta.get(i), citta.get(j));
+                    if(metodo_bellissimo(citta.get(i), citta.get(j))){
+                        sentieri_veicolo[i][j] = archeologo.scegliVeicolo(archeologo, citta.get(i), citta.get(j));
                     }else{
-                        sentieri_veicolo_uno[i][j] = infinito;
+                        sentieri_veicolo[i][j] = infinito;
                     }
                 }
             }
         }
-        return sentieri_veicolo_uno;
-    }
-
-    public double[][] creaPercorsoVeicoloDue (){
-
-        double infinito = Double.POSITIVE_INFINITY;
-        double[][] sentieri_veicolo_due = new double[numero_citta][numero_citta];
         for(int i = 0; i < numero_citta; i++){
-            for (int j = 0; j < numero_citta; j++){
-                if(i == j){
-                    sentieri_veicolo_due[i][j] = 0;
-                }else{
-                    if(citta.get(i).getCollegamenti_citta().contains(citta.get(j).getID())){
-                        sentieri_veicolo_due[i][j] = calcolo_lunghezza_sentiero_due(citta.get(i), citta.get(j));
-                    }else{
-                        sentieri_veicolo_due[i][j] = infinito;
-                    }
-                }
+            for(int j = 0; j < numero_citta; j++){
+                System.out.print(String.format("%8.2f ", sentieri_veicolo[i][j] ));
             }
+            System.out.println("");
         }
-        return sentieri_veicolo_due;
+        return sentieri_veicolo;
+    }
+
+
+    public boolean metodo_bellissimo(Citta c1, Citta c2){
+         for (int i = 0; i < c1.getCollegamenti_citta().size(); i++){
+             if(c1.getCollegamenti_citta().get(i).equals(c2.getID())){
+                 return true;
+             }
+         }
+         return false;
     }
 
 
 
-    public double calcolo_lunghezza_sentiero_uno(Citta citta_uno, Citta citta_due){
 
-        double lunghezza = 0;
-
-        lunghezza = Math.sqrt(Math.pow((citta_uno.getCoordinate().getAscissa() - citta_due.getCoordinate().getAscissa()), 2)
-                + Math.pow((citta_uno.getCoordinate().getOridinata() - citta_due.getCoordinate().getOridinata()) , 2));
-
-        return lunghezza;
-    }
-
-    public double calcolo_lunghezza_sentiero_due(Citta citta_uno, Citta citta_due) {
-        double lunghezza = 0;
-
-        lunghezza = Math.abs(citta_uno.getCoordinate().getAltitudine() - citta_due.getCoordinate().getAltitudine());
-
-        return lunghezza;
-    }
 
 
 }

@@ -12,5 +12,10 @@ public class Main {
             System.out.println(mp.getCitta().get(i).getNome());
         }
 
+        Archeologo ar1 = new Archeologo(Team.Tonatiuh);
+        Archeologo ar2 = new Archeologo(Team.Metztli);
+        mp.creaPercorso(ar1);
+        System.out.println("");
+        mp.creaPercorso(ar2);
     }
 }
