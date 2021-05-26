@@ -59,15 +59,15 @@ public class Mappa {
                     if(xmlr.getLocalName().equals("city")){
                         for (int i = 0; i < xmlr.getAttributeCount(); i++) {
                             //System.out.printf(" => attributo %s->%s%n", xmlr.getAttributeLocalName(i), xmlr.getAttributeValue(i));
-                            if(xmlr.getLocalName().equals("name")){
+                            if(xmlr.getAttributeLocalName(i).equals("name")){
                                 name = xmlr.getAttributeValue(i);
-                            }else if(xmlr.getLocalName().equals("id")){
+                            }else if(xmlr.getAttributeLocalName(i).equals("id")){
                                 id = Integer.valueOf(xmlr.getAttributeValue(i));
-                            }else if(xmlr.getLocalName().equals("x")){
+                            }else if(xmlr.getAttributeLocalName(i).equals("x")){
                                 x = Double.valueOf(xmlr.getAttributeValue(i));
-                            }else if(xmlr.getLocalName().equals("y")){
+                            }else if(xmlr.getAttributeLocalName(i).equals("y")){
                                 y = Double.valueOf(xmlr.getAttributeValue(i));
-                            }else if(xmlr.getLocalName().equals("z")){
+                            }else if(xmlr.getAttributeLocalName(i).equals("z")){
                                 z = Double.valueOf(xmlr.getAttributeValue(i));
                             }
                         }
@@ -91,7 +91,7 @@ public class Mappa {
 
     }
 
-    public double[][] creaPercorso (){
+    public double[][] creaPercorso (Archeologo archeologo){
 
         double infinito = Double.POSITIVE_INFINITY;
         double[][] sentieri_veicolo_uno = new double[numero_citta][numero_citta];
