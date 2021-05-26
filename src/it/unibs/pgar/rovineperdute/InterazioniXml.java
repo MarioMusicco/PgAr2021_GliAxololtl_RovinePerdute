@@ -12,7 +12,7 @@ public class InterazioniXml {
         XMLStreamReader xmlr = null;
         try {
             xmlif = XMLInputFactory.newInstance();
-            xmlr = xmlif.createXMLStreamReader(filename, new FileInputStream(filename));
+            xmlr = xmlif.createXMLStreamReader("PgAr_Map_5.xml", new FileInputStream("PgAr_Map_5.xml"));
         } catch (Exception e) {
             System.out.println("Errore nell'inizializzazione del reader:");
             System.out.println(e.getMessage());
@@ -21,7 +21,7 @@ public class InterazioniXml {
         while (xmlr.hasNext()) { // continua a leggere finché ha eventi a disposizione
             switch (xmlr.getEventType()) { // switch sul tipo di evento
                 case XMLStreamConstants.START_DOCUMENT: // inizio del documento: stampa che inizia il documento
-                    System.out.println("Start Read Doc " + filename);
+                    System.out.println("Start Read Doc " + "PgAr_Map_5.xml");
                     break;
                 case XMLStreamConstants.START_ELEMENT: // inizio di un elemento: stampa il nome del tag e i suoi attributi
                     System.out.println("Tag " + xmlr.getLocalName());
@@ -49,12 +49,14 @@ public class InterazioniXml {
         XMLStreamWriter xmlw = null;
         try {
             xmlof = XMLOutputFactory.newInstance();
-            xmlw = xmlof.createXMLStreamWriter(new FileOutputStream(filename), "utf-8");
+            xmlw = xmlof.createXMLStreamWriter(new FileOutputStream("Routes.xml"), "utf-8");
             xmlw.writeStartDocument("utf-8", "1.0");
         } catch (Exception e) {
             System.out.println("Errore nell'inizializzazione del writer:");
             System.out.println(e.getMessage());
         }
+
+
     }
 
 

@@ -1,17 +1,20 @@
 package it.unibs.pgar.rovineperdute;
 
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import java.io.FileInputStream;
 import java.util.*;
 
 public class Mappa {
 
     private int numero_citta;
-    private ArrayList<Citta> citta;
-    String nome; //facoltativo
+    private ArrayList<Citta> citta= new ArrayList<>();
 
-    public Mappa(int numero_citta, ArrayList<Citta> citta, String nome) {
-        this.numero_citta = numero_citta;
-        this.citta = citta;
-        this.nome = nome;
+    public Mappa() throws XMLStreamException {
+        creaMappa();
+        this.numero_citta = citta.size();
     }
 
     public int getNumero_citta() {
@@ -30,20 +33,65 @@ public class Mappa {
         this.citta = citta;
     }
 
-    public String getNome() {
-        return nome;
+    public void creaMappa() throws XMLStreamException {
+
+        XMLInputFactory xmlif = null;
+        XMLStreamReader xmlr = null;
+        try {
+            xmlif = XMLInputFactory.newInstance();
+            xmlr = xmlif.createXMLStreamReader("PgAr_Map_5.xml", new FileInputStream("PgAr_Map_5.xml"));
+        } catch (Exception e) {
+            System.out.println("Errore nell'inizializzazione del reader:");
+            System.out.println(e.getMessage());
+        }
+
+        String name = null;
+        int id = 0;
+        double x = 0, y = 0, z = 0;
+        ArrayList<Integer> collegamenti = new ArrayList<>();
+
+        while (xmlr.hasNext()) { // continua a leggere finché ha eventi a disposizione
+            switch (xmlr.getEventType()) { // switch sul tipo di evento
+                case XMLStreamConstants.START_DOCUMENT: // inizio del documento: stampa che inizia il documento
+                    break;
+
+                case XMLStreamConstants.START_ELEMENT: // inizio di un elemento: stampa il nome del tag e i suoi attributi
+                    if(xmlr.getLocalName().equals("city")){
+                        for (int i = 0; i < xmlr.getAttributeCount(); i++) {
+                            //System.out.printf(" => attributo %s->%s%n", xmlr.getAttributeLocalName(i), xmlr.getAttributeValue(i));
+                            if(xmlr.getLocalName().equals("name")){
+                                name = xmlr.getAttributeValue(i);
+                            }else if(xmlr.getLocalName().equals("id")){
+                                id = Integer.valueOf(xmlr.getAttributeValue(i));
+                            }else if(xmlr.getLocalName().equals("x")){
+                                x = Double.valueOf(xmlr.getAttributeValue(i));
+                            }else if(xmlr.getLocalName().equals("y")){
+                                y = Double.valueOf(xmlr.getAttributeValue(i));
+                            }else if(xmlr.getLocalName().equals("z")){
+                                z = Double.valueOf(xmlr.getAttributeValue(i));
+                            }
+                        }
+                    }else if(xmlr.getLocalName().equals("link")){
+                        int numero = xmlr.getAttributeCount()-1;
+                        collegamenti.add(Integer.valueOf(xmlr.getAttributeValue(numero)));
+                    }
+
+                    break;
+
+                case XMLStreamConstants.END_ELEMENT: // fine di un elemento: stampa il nome del tag chiuso
+                    if(xmlr.getLocalName().equals("city")){
+                        Coordinate cord = new Coordinate(z, y, x);
+                        Citta city = new Citta(cord, name, id, collegamenti);
+                        citta.add(city);
+                    }
+                    break;
+            }
+            xmlr.next();
+        }
+
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void creaMappa(){
-        //lettura file ed ad ogni cilo si crea una citta
-
-    }
-
-    public double[][] creaPercorsoVeicoloUno (){
+    public double[][] creaPercorso (){
 
         double infinito = Double.POSITIVE_INFINITY;
         double[][] sentieri_veicolo_uno = new double[numero_citta][numero_citta];

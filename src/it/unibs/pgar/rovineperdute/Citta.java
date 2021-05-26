@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Citta {
 
     private Coordinate coordinate;
-    String nome;
+    private String nome;
     private int ID;
     private ArrayList<Integer> collegamenti_citta;
 
