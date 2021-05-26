@@ -128,13 +128,28 @@ public class Mappa {
                 }
             }
         }
-        for(int i = 0; i < numero_citta; i++){
-            for(int j = 0; j < numero_citta; j++){
-                System.out.print(String.format("%8.2f ", sentieri_veicolo[i][j] ));
-            }
-            System.out.println("");
-        }
+//        for(int i = 0; i < numero_citta; i++){
+//            for(int j = 0; j < numero_citta; j++){
+//                System.out.print(String.format("%8.2f ", sentieri_veicolo[i][j] ));
+//            }
+//            System.out.println("");
+//        }
         return sentieri_veicolo;
+    }
+
+    public void percorsoMigliore (Archeologo archeologo){
+
+        double[][] matrice = new double[numero_citta][numero_citta];
+        matrice = creaPercorso(archeologo);
+
+        double infinito = Double.POSITIVE_INFINITY;
+        double[][] matrice_appoggio = new double[numero_citta][numero_citta];
+        for (int i = 0; i < numero_citta; i++){
+            for(int j = 0; j < numero_citta; j++){
+                matrice_appoggio[i][j] = infinito;
+            }
+        }
+        //metodo bellissimo
     }
 
 }
