@@ -22,6 +22,7 @@ public class InterazioniXml {
 
 
         try { // blocco try per raccogliere eccezioni
+
             xmlw.writeCharacters("\n");
             xmlw.writeStartElement("routes");
             xmlw.writeCharacters("\n");
@@ -60,7 +61,8 @@ public class InterazioniXml {
 
             }
 
-
+            xmlw.writeEndElement();
+            xmlw.writeEndElement();
 
         } catch (Exception e) { // se c’è un errore viene eseguita questa parte
             System.out.println("Errore nella scrittura");
