@@ -128,28 +128,117 @@ public class Mappa {
                 }
             }
         }
-//        for(int i = 0; i < numero_citta; i++){
-//            for(int j = 0; j < numero_citta; j++){
-//                System.out.print(String.format("%8.2f ", sentieri_veicolo[i][j] ));
-//            }
-//            System.out.println("");
-//        }
+        for(int i = 0; i < numero_citta; i++){
+            for(int j = 0; j < numero_citta; j++){
+                System.out.print(String.format("%8.2f ", sentieri_veicolo[i][j] ));
+            }
+            System.out.println("");
+        }
         return sentieri_veicolo;
     }
 
-    public void percorsoMigliore (Archeologo archeologo){
+    public Sentiero percorsoMigliore (Archeologo archeologo){
 
         double[][] matrice = new double[numero_citta][numero_citta];
         matrice = creaPercorso(archeologo);
 
-        double infinito = Double.POSITIVE_INFINITY;
-        double lunghezza = 0;
+        Sentiero sentiero_migliore= new Sentiero();
 
+
+        double infinito = Double.POSITIVE_INFINITY;
+
+        for (int j=1; j<numero_citta; j++){
+            int i=0;
+            boolean fine_percorso_= false;
+            Sentiero sentiero_alternativo= new Sentiero();
+            ArrayList<Integer> iDToccati= new ArrayList<Integer>();
+
+            if (matrice[i][j]!=0 && matrice[i][j]!=infinito){
+                sentiero_alternativo.addCitta_toccate(citta.get(j));
+                sentiero_alternativo.setDistanza(sentiero_alternativo.getDistanza()+ matrice[i][j]);
+                iDToccati.add(i);
+                i=j;
+                j=0;
+
+                while (!fine_percorso_) {
+
+                    if (i == numero_citta - 1) {
+
+                        if(sentiero_migliore.getDistanza()==0){
+                            sentiero_migliore= sentiero_alternativo;
+                            fine_percorso_= true;
+                        }else if(controlloPercorsoMigliore(sentiero_migliore, sentiero_alternativo)){
+                            sentiero_migliore= sentiero_alternativo;
+                        }
+
+                        for (int k= sentiero_alternativo.getCitta_toccate().size()-1; k>=0; k--){
+
+                            for(int h= )
+                            if(sentiero_alternativo.getCitta_toccate().get(k).getID())
+                        }
+
+
+                    }else if (matrice[i][j] != 0 && matrice[i][j] != infinito) {
+                        if(iDToccati.contains(j)){
+                            sentiero_alternativo.addCitta_toccate(citta.get(j));
+                            sentiero_alternativo.setDistanza(sentiero_alternativo.getDistanza() + matrice[i][j]);
+                            iDToccati.add(i);
+                            i = j;
+                            j = 0;
+                        }
+
+
+                    }
+                    j++;
+                }
+            }
+        }
 
         //metodo bellissimo
+        return sentiero_migliore;
     }
 
+    /**
+     * metodo di appoggio che controlla quala dei due sentieri sia il migliore.
+     * ritorna true se quello da confrontare è meglio di quello vecchio,
+     * ritorna false se quello vecchio è meglio di quello da confrontare;
+     *
+     * @param sent_migl
+     * @param sent_conf
+     * @return
+     */
+    private boolean controlloPercorsoMigliore (Sentiero sent_migl, Sentiero sent_conf){
 
+        boolean migliore= false;
+
+        if(sent_migl.getDistanza()<sent_conf.getDistanza()){
+            migliore= true;
+        }else if(sent_migl.getCitta_toccate().size()<sent_conf.getCitta_toccate().size()){
+            migliore= true;
+        }else if(cittaMaggiore(sent_migl)< cittaMaggiore(sent_conf)){
+            migliore= true;
+        }
+
+        return migliore;
+    }
+
+    /**
+     * metodo di appoggio che controlla quale sia l'id maggiore tra tutti quelli
+     * delle città attraaversate da un sentiero
+     *
+     * @param sentiero
+     * @return
+     */
+    private int cittaMaggiore(Sentiero sentiero){
+        int IDmagg=0;
+
+        for(int i=0; i<sentiero.getCitta_toccate().size(); i++){
+            if(sentiero.getCitta_toccate().get(i).getID()>IDmagg)
+                IDmagg= sentiero.getCitta_toccate().get(i).getID();
+        }
+
+        return IDmagg;
+    }
 
 
 }

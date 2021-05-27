@@ -7,9 +7,8 @@ public class Sentiero {
     private ArrayList<Citta> citta_toccate = new ArrayList<>();
     private double distanza;
 
-    public Sentiero(ArrayList<Citta> id_citta_toccate, double distanza) {
-        this.citta_toccate = id_citta_toccate;
-        this.distanza = distanza;
+    public Sentiero() {
+        this.distanza=0;
     }
 
     public ArrayList<Citta> getCitta_toccate() {
@@ -26,5 +25,9 @@ public class Sentiero {
 
     public void setDistanza(double distanza) {
         this.distanza = distanza;
+    }
+
+    public void addCitta_toccate(Citta citta){
+        citta_toccate.add(citta);
     }
 }
