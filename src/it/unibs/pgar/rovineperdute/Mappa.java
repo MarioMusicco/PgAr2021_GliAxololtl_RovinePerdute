@@ -128,12 +128,12 @@ public class Mappa {
                 }
             }
         }
-//        for(int i = 0; i < numero_citta; i++){
-//            for(int j = 0; j < numero_citta; j++){
-//                System.out.print(String.format("%8.2f ", sentieri_veicolo[i][j] ));
-//            }
-//            System.out.println("");
-//        }
+        for(int i = 0; i < numero_citta; i++){
+            for(int j = 0; j < numero_citta; j++){
+                System.out.print(String.format("%8.2f ", sentieri_veicolo[i][j] ));
+            }
+            System.out.println("");
+        }
         return sentieri_veicolo;
     }
 
@@ -149,7 +149,10 @@ public class Mappa {
                 matrice_appoggio[i][j] = infinito;
             }
         }
+
         //metodo bellissimo
     }
+
+
 
 }
