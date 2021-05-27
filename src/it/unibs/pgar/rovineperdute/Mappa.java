@@ -144,15 +144,14 @@ public class Mappa {
 
         double infinito = Double.POSITIVE_INFINITY;
         double[][] matrice_appoggio = new double[numero_citta][numero_citta];
-        for (int i = 0; i < numero_citta; i++){
-            for(int j = 0; j < numero_citta; j++){
-                matrice_appoggio[i][j] = infinito;
-            }
-        }
 
         //metodo bellissimo
     }
 
+//    public int metodoBello(double[][] matrice, int i, double lunghezza){
+//
+//
+//    }
 
 
 }
