@@ -43,7 +43,7 @@ public class Archeologo {
      * @param citta_due
      * @return
      */
-    public double calcolo_lunghezza_sentiero_tonatiuh(Citta citta_uno, Citta citta_due){
+    private double calcolo_lunghezza_sentiero_tonatiuh(Citta citta_uno, Citta citta_due){
 
         double lunghezza = 0;
 
@@ -59,7 +59,7 @@ public class Archeologo {
      * @param citta_due
      * @return
      */
-    public double calcolo_lunghezza_sentiero_metztli(Citta citta_uno, Citta citta_due) {
+    private double calcolo_lunghezza_sentiero_metztli(Citta citta_uno, Citta citta_due) {
         double lunghezza = 0;
 
         lunghezza = Math.abs(citta_uno.getCoordinate().getAltitudine() - citta_due.getCoordinate().getAltitudine());

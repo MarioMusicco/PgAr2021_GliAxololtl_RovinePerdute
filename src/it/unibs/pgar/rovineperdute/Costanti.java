@@ -27,6 +27,8 @@ public class Costanti {
     public static final String LATITUDINE = "y";
     public static final String ALTITUDINE = "h";
 
+    public static final String FINE_PROGRAMMA = "Il documento è pronto, scusate per l'attesa";
+
 
     /**
      * Metodo per la scelta da parte dell'utente di quale mappa da utilizzare tra quelle disponibili

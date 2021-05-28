@@ -15,5 +15,7 @@ public class Main {
         ar2.setSentiero_ottimizzato(mp.percorsoMigliore(ar2));
 
         ar1.creaXML(ar2);
+
+        System.out.println(Costanti.FINE_PROGRAMMA);
     }
 }

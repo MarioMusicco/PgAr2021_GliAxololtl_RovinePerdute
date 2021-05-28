@@ -137,6 +137,13 @@ public class Mappa {
         return sentieri_veicolo;
     }
 
+    /**
+     * metodo che restituisce il percorso migliore rispetto a tutti quelli possibili
+     * adando a confrontare quello attualmente trovato con quello fin'ora ritenuto più corto.
+     *
+     * @param archeologo
+     * @return
+     */
     public Sentiero percorsoMigliore (Archeologo archeologo){
 
         double[][] matrice = new double[numero_citta][numero_citta];
@@ -295,6 +302,12 @@ public class Mappa {
         return info_condensate;
     }
 
+    /**
+     * metodo che prende il sentiero appena creato e lo rende
+     * quello migliore trovato fin'ora
+     * @param sentiero_migliore
+     * @param sentiero_alternativo
+     */
     private void sostituisciSentiero(Sentiero sentiero_migliore, Sentiero sentiero_alternativo){
         sentiero_migliore.setDistanza(sentiero_alternativo.getDistanza());
         sentiero_migliore.getCitta_toccate().clear();
