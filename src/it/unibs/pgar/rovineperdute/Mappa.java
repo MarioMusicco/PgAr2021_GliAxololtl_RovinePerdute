@@ -142,59 +142,59 @@ public class Mappa {
         double[][] matrice = new double[numero_citta][numero_citta];
         matrice = creaPercorso(archeologo);
 
-        Sentiero sentiero_migliore= new Sentiero();
-
-
         double infinito = Double.POSITIVE_INFINITY;
 
-        for (int j=1; j<numero_citta; j++){
-            int i=0;
-            boolean fine_percorso_= false;
-            Sentiero sentiero_alternativo= new Sentiero();
-            ArrayList<Integer> iDToccati= new ArrayList<Integer>();
 
-            if (matrice[i][j]!=0 && matrice[i][j]!=infinito){
-                sentiero_alternativo.addCitta_toccate(citta.get(j));
-                sentiero_alternativo.setDistanza(sentiero_alternativo.getDistanza()+ matrice[i][j]);
-                iDToccati.add(i);
-                i=j;
-                j=0;
+        int i=0;
+        int j=0;
+        boolean fine_percorsi_possibili= false;
 
-                while (!fine_percorso_) {
-
-                    if (i == numero_citta - 1) {
-
-                        if(sentiero_migliore.getDistanza()==0){
-                            sentiero_migliore= sentiero_alternativo;
-                            fine_percorso_= true;
-                        }else if(controlloPercorsoMigliore(sentiero_migliore, sentiero_alternativo)){
-                            sentiero_migliore= sentiero_alternativo;
-                        }
-
-                        for (int k= sentiero_alternativo.getCitta_toccate().size()-1; k>=0; k--){
-
-                            for(int h= )
-                            if(sentiero_alternativo.getCitta_toccate().get(k).getID())
-                        }
+        Sentiero sentiero_migliore= new Sentiero();
+        Sentiero sentiero_alternativo= new Sentiero();
+        ArrayList<Integer> iDToccati= new ArrayList<Integer>();
 
 
-                    }else if (matrice[i][j] != 0 && matrice[i][j] != infinito) {
-                        if(iDToccati.contains(j)){
-                            sentiero_alternativo.addCitta_toccate(citta.get(j));
-                            sentiero_alternativo.setDistanza(sentiero_alternativo.getDistanza() + matrice[i][j]);
-                            iDToccati.add(i);
-                            i = j;
-                            j = 0;
-                        }
 
+        while (!fine_percorsi_possibili) {
 
-                    }
-                    j++;
+            if (i == numero_citta - 1) {//completato un sentiero vado a controllare che sia il sentiero migliore disponibile
+
+                if(sentiero_migliore.getDistanza()==0){
+                    sentiero_migliore= sentiero_alternativo;
+                }else if(controlloPercorsoMigliore(sentiero_migliore, sentiero_alternativo)){
+                    sentiero_migliore= sentiero_alternativo;
                 }
+
+                String convertire= ritornoSuiMieiPassi(sentiero_alternativo, matrice, iDToccati, i, j, infinito);
+                String[] parti= convertire.split("-");
+                int k= Integer.parseInt(parti[0]);
+                j= Integer.parseInt(parti[1]);
+                i= Integer.parseInt(parti[2]);
+
+                if(k== -1){//controllo che si assicura che ci siano altri sentieri disponibili oppure se abbiamop trovato tutti quelli possibili
+                    fine_percorsi_possibili= true;
+                }
+
+            }else if (matrice[i][j] != 0 && matrice[i][j] != infinito){//andiamo ad aggiungere una città non visitata al mio sentiero alternativo
+                if(!iDToccati.contains(j)){
+                    sentiero_alternativo.addCitta_toccate(citta.get(j));
+                    sentiero_alternativo.setDistanza(sentiero_alternativo.getDistanza() + matrice[i][j]);
+                    iDToccati.add(i);
+                    i = j;
+                }
+
+
             }
+            //caso dei vicoli ciechi
+            if(j== numero_citta-1 && matrice[i][j]== infinito){
+                String convertire= ritornoSuiMieiPassi(sentiero_alternativo, matrice, iDToccati, i, j, infinito);
+                String[] parti= convertire.split("-");
+                j= Integer.parseInt(parti[1]);
+                i= Integer.parseInt(parti[2]);
+            }
+            j++;
         }
 
-        //metodo bellissimo
         return sentiero_migliore;
     }
 
@@ -211,12 +211,14 @@ public class Mappa {
 
         boolean migliore= false;
 
-        if(sent_migl.getDistanza()<sent_conf.getDistanza()){
+        if(sent_migl.getDistanza()> sent_conf.getDistanza()){
             migliore= true;
-        }else if(sent_migl.getCitta_toccate().size()<sent_conf.getCitta_toccate().size()){
-            migliore= true;
-        }else if(cittaMaggiore(sent_migl)< cittaMaggiore(sent_conf)){
-            migliore= true;
+        }else if(sent_migl.getDistanza()== sent_conf.getDistanza()) {
+            if (sent_migl.getCitta_toccate().size() > sent_conf.getCitta_toccate().size()) {
+                migliore = true;
+            } else if (sent_migl.getCitta_toccate().size()== sent_conf.getCitta_toccate().size() && cittaMaggiore(sent_migl) > cittaMaggiore(sent_conf)) {
+                migliore = true;
+            }
         }
 
         return migliore;
@@ -240,5 +242,49 @@ public class Mappa {
         return IDmagg;
     }
 
+    /**
+     *  metodo di appoggio che in caso un team debba tornare indietro
+     *  (dopo aver trovato un percorso valido oppure un vicolo cieco)
+     *  permette di tornare in una città  già visitata e controlla se si possa
+     *  andare ad altre città non ancora visitate.
+     *
+     *  ritorna una stringa che contiene la condizione di fine della ricerca dei percorsi(k)
+     *  la riga della matrice su cui andremo a cercare la città non ancora visitata(i)
+     *  e la colonna della matrice che identifica la città non ancora visitata(j)
+     *
+     * @param sentiero_alternativo
+     * @param matrice
+     * @param iDToccati
+     * @param i
+     * @param j
+     * @param infinito
+     * @return
+     */
+    private String ritornoSuiMieiPassi(Sentiero sentiero_alternativo, double matrice[][], ArrayList<Integer> iDToccati, int i, int j, double infinito){
+        boolean fine_rimozoni= false;
+
+        int k;
+        for (k= sentiero_alternativo.getCitta_toccate().size()-2; k>=0; k--){
+
+            for(int h= sentiero_alternativo.getCitta_toccate().get(k+1).getID(); h<numero_citta; h++){
+
+                if(matrice[iDToccati.get(k)][h]!=0 && matrice[iDToccati.get(k)][h]!=infinito){
+                    if(!iDToccati.contains(h)) {
+                        fine_rimozoni = true;
+                        i = iDToccati.get(k);
+                        j = h-1;
+                    }
+                }
+            }
+            sentiero_alternativo.getCitta_toccate().remove(k+1);
+            iDToccati.remove(k+1);
+            if(fine_rimozoni){
+                break;
+            }
+        }
+
+        String info_condensate= String.valueOf(k)+"-"+String.valueOf(j)+"-"+String.valueOf(i);
+        return info_condensate;
+    }
 
 }
