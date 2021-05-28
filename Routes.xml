@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<routes>
+    <route Team="Tonatiuh" cost="11115.513781264603" cities="3">
+        <city id="0" nome="campo base"></city>
+        <city id="3" nome="Mixco Vieio"></city>
+        <city id="4" nome="Rovine Perdute"></city>
+    </route>
+    <route Team="Metztli" cost="1791.0" cities="3">
+        <city id="0" nome="campo base"></city>
+        <city id="3" nome="Mixco Vieio"></city>
+        <city id="4" nome="Rovine Perdute"></city>
+    </route>
+</routes>

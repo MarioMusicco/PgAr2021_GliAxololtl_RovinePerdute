@@ -108,7 +108,7 @@ public class Mappa {
      * @param archeologo
      * @return matrice grafo
      */
-    public double[][] creaPercorso (Archeologo archeologo){
+    private double[][] creaPercorso (Archeologo archeologo){
 
         double infinito = Double.POSITIVE_INFINITY;
         double[][] sentieri_veicolo = new double[numero_citta][numero_citta];
@@ -121,7 +121,7 @@ public class Mappa {
                     //controlla se la città presa (quella che corrisponde all'indice i) in considerazione possiede nei suoi collegamenti con le altre città
                     //l'id della seconda città che stiamo controllando (quella che corrisponde all'indice j)
                     if(citta.get(i).getCollegamenti_citta().contains(citta.get(j).getID())){
-                        sentieri_veicolo[i][j] = archeologo.carburanteUtilizzato(archeologo, citta.get(i), citta.get(j));
+                        sentieri_veicolo[i][j] = archeologo.carburanteUtilizzato(citta.get(i), citta.get(j));
                     }else{
                         sentieri_veicolo[i][j] = infinito;
                     }
@@ -167,11 +167,10 @@ public class Mappa {
                     sostituisciSentiero(sentiero_migliore, sentiero_alternativo);
                 }
 
-                String convertire= ritornoSuiMieiPassi(sentiero_alternativo, matrice, iDToccati, i, j, infinito);
-                String[] parti= convertire.split("_");
-                int k= Integer.parseInt(parti[0]);
-                j= Integer.parseInt(parti[1]);
-                i= Integer.parseInt(parti[2]);
+                int[] convertire= ritornoSuiMieiPassi(sentiero_alternativo, matrice, iDToccati, i, j, infinito);
+                int k= convertire[0];
+                j= convertire[1];
+                i= convertire[2];
 
                 if(k== -1){//controllo che si assicura che ci siano altri sentieri disponibili oppure se abbiamop trovato tutti quelli possibili
                     fine_percorsi_possibili= true;
@@ -189,11 +188,10 @@ public class Mappa {
             }
             //caso dei vicoli ciechi
             if(j== numero_citta-1 && matrice[i][j]== infinito){
-                String convertire= ritornoSuiMieiPassi(sentiero_alternativo, matrice, iDToccati, i, j, infinito);
-                String[] parti= convertire.split("_");
-                int k= Integer.parseInt(parti[0]);
-                j= Integer.parseInt(parti[1]);
-                i= Integer.parseInt(parti[2]);
+                int[] convertire= ritornoSuiMieiPassi(sentiero_alternativo, matrice, iDToccati, i, j, infinito);
+                int k= convertire[0];
+                j= convertire[1];
+                i= convertire[2];
                 if(k== -1){//controllo che si assicura che ci siano altri sentieri disponibili oppure se abbiamop trovato tutti quelli possibili
                     fine_percorsi_possibili= true;
                 }
@@ -268,7 +266,7 @@ public class Mappa {
      * @param infinito
      * @return
      */
-    private String ritornoSuiMieiPassi(Sentiero sentiero_alternativo, double matrice[][], ArrayList<Integer> iDToccati, int i, int j, double infinito){
+    private int[] ritornoSuiMieiPassi(Sentiero sentiero_alternativo, double matrice[][], ArrayList<Integer> iDToccati, int i, int j, double infinito){
         boolean fine_rimozoni= false;
 
         int k;
@@ -293,7 +291,7 @@ public class Mappa {
             }
         }
 
-        String info_condensate= String.valueOf(k)+"_"+String.valueOf(j)+"_"+String.valueOf(i);
+        int[] info_condensate= {k, j, i};
         return info_condensate;
     }
 

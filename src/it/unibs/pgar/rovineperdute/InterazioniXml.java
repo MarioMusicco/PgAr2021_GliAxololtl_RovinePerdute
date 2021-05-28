@@ -46,6 +46,7 @@ public class InterazioniXml {
 
             //si fa ricalcolare il sentiero con la matrice delle altitudini
 
+
             xmlw.writeStartElement("route");
             xmlw.writeAttribute("Team", String.valueOf(Team.Metztli));
             xmlw.writeAttribute("cost",Double.toString(sentiero.getDistanza()));

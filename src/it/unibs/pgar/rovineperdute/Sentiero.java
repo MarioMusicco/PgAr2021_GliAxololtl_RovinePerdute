@@ -15,10 +15,6 @@ public class Sentiero {
         return citta_toccate;
     }
 
-    public void setCitta_toccate(ArrayList<Citta> citta_toccate) {
-        this.citta_toccate = citta_toccate;
-    }
-
     public double getDistanza() {
         return distanza;
     }
