@@ -128,12 +128,12 @@ public class Mappa {
                 }
             }
         }
-        for(int i = 0; i < numero_citta; i++){
+        /*for(int i = 0; i < numero_citta; i++){
             for(int j = 0; j < numero_citta; j++){
                 System.out.print(String.format("%8.2f ", sentieri_veicolo[i][j] ));
             }
             System.out.println("");
-        }
+        }*/
         return sentieri_veicolo;
     }
 
@@ -151,7 +151,9 @@ public class Mappa {
 
         Sentiero sentiero_migliore= new Sentiero();
         Sentiero sentiero_alternativo= new Sentiero();
+        sentiero_alternativo.addCitta_toccate(citta.get(j));
         ArrayList<Integer> iDToccati= new ArrayList<Integer>();
+        iDToccati.add(i);
 
 
 
@@ -160,13 +162,13 @@ public class Mappa {
             if (i == numero_citta - 1) {//completato un sentiero vado a controllare che sia il sentiero migliore disponibile
 
                 if(sentiero_migliore.getDistanza()==0){
-                    sentiero_migliore= sentiero_alternativo;
+                    sostituisciSentiero(sentiero_migliore, sentiero_alternativo);
                 }else if(controlloPercorsoMigliore(sentiero_migliore, sentiero_alternativo)){
-                    sentiero_migliore= sentiero_alternativo;
+                    sostituisciSentiero(sentiero_migliore, sentiero_alternativo);
                 }
 
                 String convertire= ritornoSuiMieiPassi(sentiero_alternativo, matrice, iDToccati, i, j, infinito);
-                String[] parti= convertire.split("-");
+                String[] parti= convertire.split("_");
                 int k= Integer.parseInt(parti[0]);
                 j= Integer.parseInt(parti[1]);
                 i= Integer.parseInt(parti[2]);
@@ -179,7 +181,7 @@ public class Mappa {
                 if(!iDToccati.contains(j)){
                     sentiero_alternativo.addCitta_toccate(citta.get(j));
                     sentiero_alternativo.setDistanza(sentiero_alternativo.getDistanza() + matrice[i][j]);
-                    iDToccati.add(i);
+                    iDToccati.add(j);
                     i = j;
                 }
 
@@ -188,9 +190,13 @@ public class Mappa {
             //caso dei vicoli ciechi
             if(j== numero_citta-1 && matrice[i][j]== infinito){
                 String convertire= ritornoSuiMieiPassi(sentiero_alternativo, matrice, iDToccati, i, j, infinito);
-                String[] parti= convertire.split("-");
+                String[] parti= convertire.split("_");
+                int k= Integer.parseInt(parti[0]);
                 j= Integer.parseInt(parti[1]);
                 i= Integer.parseInt(parti[2]);
+                if(k== -1){//controllo che si assicura che ci siano altri sentieri disponibili oppure se abbiamop trovato tutti quelli possibili
+                    fine_percorsi_possibili= true;
+                }
             }
             j++;
         }
@@ -216,8 +222,10 @@ public class Mappa {
         }else if(sent_migl.getDistanza()== sent_conf.getDistanza()) {
             if (sent_migl.getCitta_toccate().size() > sent_conf.getCitta_toccate().size()) {
                 migliore = true;
-            } else if (sent_migl.getCitta_toccate().size()== sent_conf.getCitta_toccate().size() && cittaMaggiore(sent_migl) > cittaMaggiore(sent_conf)) {
-                migliore = true;
+            } else if (sent_migl.getCitta_toccate().size()== sent_conf.getCitta_toccate().size() ){
+                if(cittaMaggiore(sent_migl) < cittaMaggiore(sent_conf)){
+                    migliore = true;
+                }
             }
         }
 
@@ -234,7 +242,7 @@ public class Mappa {
     private int cittaMaggiore(Sentiero sentiero){
         int IDmagg=0;
 
-        for(int i=0; i<sentiero.getCitta_toccate().size(); i++){
+        for(int i=0; i<sentiero.getCitta_toccate().size()-1; i++){
             if(sentiero.getCitta_toccate().get(i).getID()>IDmagg)
                 IDmagg= sentiero.getCitta_toccate().get(i).getID();
         }
@@ -273,9 +281,11 @@ public class Mappa {
                         fine_rimozoni = true;
                         i = iDToccati.get(k);
                         j = h-1;
+                        break;
                     }
                 }
             }
+            sentiero_alternativo.setDistanza(sentiero_alternativo.getDistanza()- matrice[iDToccati.get(k)][iDToccati.get(k+1)]);
             sentiero_alternativo.getCitta_toccate().remove(k+1);
             iDToccati.remove(k+1);
             if(fine_rimozoni){
@@ -283,8 +293,13 @@ public class Mappa {
             }
         }
 
-        String info_condensate= String.valueOf(k)+"-"+String.valueOf(j)+"-"+String.valueOf(i);
+        String info_condensate= String.valueOf(k)+"_"+String.valueOf(j)+"_"+String.valueOf(i);
         return info_condensate;
     }
 
+    private void sostituisciSentiero(Sentiero sentiero_migliore, Sentiero sentiero_alternativo){
+        sentiero_migliore.setDistanza(sentiero_alternativo.getDistanza());
+        sentiero_migliore.getCitta_toccate().clear();
+        sentiero_migliore.getCitta_toccate().addAll(sentiero_alternativo.getCitta_toccate());
+    }
 }
