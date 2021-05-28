@@ -67,22 +67,22 @@ public class Mappa {
                     break;
 
                 case XMLStreamConstants.START_ELEMENT: // inizio di un elemento: stampa il nome del tag e i suoi attributi
-                    if(xmlr.getLocalName().equals(Costanti.CITY)){
+                    if(xmlr.getLocalName().equals(Costanti.TAG_CITY)){
                         for (int i = 0; i < xmlr.getAttributeCount(); i++) {
                             //System.out.printf(" => attributo %s->%s%n", xmlr.getAttributeLocalName(i), xmlr.getAttributeValue(i));
-                            if(xmlr.getAttributeLocalName(i).equals(Costanti.NOME)){
+                            if(xmlr.getAttributeLocalName(i).equals(Costanti.TAG_NAME)){
                                 name = xmlr.getAttributeValue(i);
-                            }else if(xmlr.getAttributeLocalName(i).equals(Costanti.ID)){
+                            }else if(xmlr.getAttributeLocalName(i).equals(Costanti.TAG_ID)){
                                 id = Integer.valueOf(xmlr.getAttributeValue(i));
-                            }else if(xmlr.getAttributeLocalName(i).equals(Costanti.LONGITUDINE)){
+                            }else if(xmlr.getAttributeLocalName(i).equals(Costanti.TAG_LONGITUDINE)){
                                 x = Double.valueOf(xmlr.getAttributeValue(i));
-                            }else if(xmlr.getAttributeLocalName(i).equals(Costanti.LATITUDINE)){
+                            }else if(xmlr.getAttributeLocalName(i).equals(Costanti.TAG_LATITUDINE)){
                                 y = Double.valueOf(xmlr.getAttributeValue(i));
-                            }else if(xmlr.getAttributeLocalName(i).equals(Costanti.ALTITUDINE)){
+                            }else if(xmlr.getAttributeLocalName(i).equals(Costanti.TAG_ALTITUDINE)){
                                 z = Double.valueOf(xmlr.getAttributeValue(i));
                             }
                         }
-                    }else if(xmlr.getLocalName().equals(Costanti.LINK)){
+                    }else if(xmlr.getLocalName().equals(Costanti.TAG_LINK)){
                         int numero = xmlr.getAttributeCount()-1;
                         collegamenti.add(Integer.valueOf(xmlr.getAttributeValue(numero)));
                     }
@@ -90,7 +90,7 @@ public class Mappa {
                     break;
 
                 case XMLStreamConstants.END_ELEMENT: // fine di un elemento: stampa il nome del tag chiuso
-                    if(xmlr.getLocalName().equals(Costanti.CITY)){
+                    if(xmlr.getLocalName().equals(Costanti.TAG_CITY)){
                         Coordinate cord = new Coordinate(z, y, x);
                         Citta city = new Citta(cord, name, id, collegamenti);
                         citta.add(city);

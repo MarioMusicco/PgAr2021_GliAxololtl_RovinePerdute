@@ -19,15 +19,27 @@ public class Costanti {
     public static final String MESSAGGIO_INPUT_ERRATO = "Il numero inserito deve essere uno di quelli indicati";
     public static final String ERRORE_NELL_INIZIALIZZAZIONE_DEL_READER = "Errore nell'inizializzazione del reader:";
 
-    public static final String CITY = "city";
-    public static final String LINK = "link";
-    public static final String NOME = "name";
-    public static final String ID = "id";
-    public static final String LONGITUDINE = "x";
-    public static final String LATITUDINE = "y";
-    public static final String ALTITUDINE = "h";
+
 
     public static final String FINE_PROGRAMMA = "Il documento è pronto, scusate per l'attesa";
+    public static final String NOME_FILE_OUTPUT = "Routes.xml";
+    public static final String ERRORE_NELL_INIZIALIZZAZIONE_DEL_WRITER = "Errore nell'inizializzazione del writer:";
+
+    public static final String ERRORE_NELLA_SCRITTURA = "Errore nella scrittura";
+
+    public static final String TAG_LINK = "link";
+    public static final String TAG_NAME = "name";
+    public static final String TAG_ID = "id";
+    public static final String TAG_LONGITUDINE = "x";
+    public static final String TAG_LATITUDINE = "y";
+    public static final String TAG_ALTITUDINE = "h";
+    public static final String TAG_ROUTES = "routes";
+    public static final String TAG_ROUTE = "route";
+    public static final String TAG_TEAM = "Team";
+    public static final String TAG_COST = "cost";
+    public static final String TAG_CITIES = "cities";
+    public static final String TAG_CITY = "city";
+    public static final String TAG_NOME = "nome";
 
 
     /**

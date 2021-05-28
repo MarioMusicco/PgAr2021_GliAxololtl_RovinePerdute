@@ -43,7 +43,7 @@ public class Archeologo {
      * @param citta_due
      * @return
      */
-    private double calcolo_lunghezza_sentiero_tonatiuh(Citta citta_uno, Citta citta_due){
+    public double calcolo_lunghezza_sentiero_tonatiuh(Citta citta_uno, Citta citta_due){
 
         double lunghezza = 0;
 
@@ -59,7 +59,7 @@ public class Archeologo {
      * @param citta_due
      * @return
      */
-    private double calcolo_lunghezza_sentiero_metztli(Citta citta_uno, Citta citta_due) {
+    public double calcolo_lunghezza_sentiero_metztli(Citta citta_uno, Citta citta_due) {
         double lunghezza = 0;
 
         lunghezza = Math.abs(citta_uno.getCoordinate().getAltitudine() - citta_due.getCoordinate().getAltitudine());
@@ -77,17 +77,17 @@ public class Archeologo {
         XMLStreamWriter xmlw = null;
         try {
             xmlof = XMLOutputFactory.newInstance();
-            xmlw = xmlof.createXMLStreamWriter(new FileOutputStream("Routes.xml"), "utf-8");
+            xmlw = xmlof.createXMLStreamWriter(new FileOutputStream(Costanti.NOME_FILE_OUTPUT), "utf-8");
             xmlw.writeStartDocument("utf-8", "1.0");
         } catch (Exception e) {
-            System.out.println("Errore nell'inizializzazione del writer:");
+            System.out.println(Costanti.ERRORE_NELL_INIZIALIZZAZIONE_DEL_WRITER);
             System.out.println(e.getMessage());
         }
 
         try {
 
             xmlw.writeCharacters("\n");
-            xmlw.writeStartElement("routes");
+            xmlw.writeStartElement(Costanti.TAG_ROUTES);
 
             scriviXML(xmlw, this.team, this.sentiero_ottimizzato);
             scriviXML(xmlw, altro_team.team, altro_team.sentiero_ottimizzato);
@@ -97,7 +97,7 @@ public class Archeologo {
             xmlw.writeEndDocument();
 
         }catch (Exception e) { // se c’è un errore viene eseguita questa parte
-                System.out.println("Errore nella scrittura");
+                System.out.println(Costanti.ERRORE_NELLA_SCRITTURA);
         }
 
     }
@@ -113,16 +113,16 @@ public class Archeologo {
 
 
         xmlw.writeCharacters("\n    ");
-        xmlw.writeStartElement("route");
-        xmlw.writeAttribute("Team", String.valueOf(team));
-        xmlw.writeAttribute("cost",Double.toString(sentiero.getDistanza()));
-        xmlw.writeAttribute("cities", Integer.toString(sentiero.getCitta_toccate().size()));
+        xmlw.writeStartElement(Costanti.TAG_ROUTE);
+        xmlw.writeAttribute(Costanti.TAG_TEAM, String.valueOf(team));
+        xmlw.writeAttribute(Costanti.TAG_COST,Double.toString(sentiero.getDistanza()));
+        xmlw.writeAttribute(Costanti.TAG_CITIES, Integer.toString(sentiero.getCitta_toccate().size()));
 
         for(int i = 0; i < sentiero.getCitta_toccate().size(); i++){
             xmlw.writeCharacters("\n        ");
-            xmlw.writeStartElement("city");
-            xmlw.writeAttribute("id", Integer.toString(sentiero.getCitta_toccate().get(i).getID()));
-            xmlw.writeAttribute("nome", String.valueOf(sentiero.getCitta_toccate().get(i).getNome()));
+            xmlw.writeStartElement(Costanti.TAG_CITY);
+            xmlw.writeAttribute(Costanti.TAG_ID, Integer.toString(sentiero.getCitta_toccate().get(i).getID()));
+            xmlw.writeAttribute(Costanti.TAG_NOME, String.valueOf(sentiero.getCitta_toccate().get(i).getNome()));
             xmlw.writeEndElement(); //forse è da commentare
 
         }
