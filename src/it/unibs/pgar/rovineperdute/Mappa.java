@@ -261,7 +261,7 @@ public class Mappa {
      *  permette di tornare in una città  già visitata e controlla se si possa
      *  andare ad altre città non ancora visitate.
      *
-     *  ritorna una stringa che contiene la condizione di fine della ricerca dei percorsi(k)
+     *  ritorna un array che contiene la condizione di fine della ricerca dei percorsi(k)
      *  la riga della matrice su cui andremo a cercare la città non ancora visitata(i)
      *  e la colonna della matrice che identifica la città non ancora visitata(j)
      *
